@@ -14,10 +14,14 @@
     "bundle:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios' --assets-dest ios",
     "apk:debug": "cd android && ./gradlew assembleDebug && cd ..",
     "apk:release": "cd android && ./gradlew assembleRelease && cd ..",
-    "aab:release": "cd android && ./gradlew bundleRelease && cd .."
+    "aab:release": "cd android && ./gradlew bundleRelease && cd ..",
+    "sha": "cd android && ./gradlew signingReport && cd .."
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.19.0",
+    "@react-native-firebase/app": "^18.1.0",
+    "@react-native-firebase/auth": "^18.1.0",
+    "@react-native-firebase/crashlytics": "^18.1.0",
     "@react-native-masked-view/masked-view": "^0.2.9",
     "@react-navigation/drawer": "^6.6.3",
     "@react-navigation/native": "^6.1.7",

@@ -2,13 +2,14 @@ import {DrawerItem} from '@react-navigation/drawer';
 import React from 'react';
 import {StyleSheet, View, Pressable, Alert} from 'react-native';
 import {connect} from 'react-redux';
-import {IMAGES} from '../../assets';
-import {Container, CustomIcon, ICON_TYPE} from '../../components';
+import {Container, CustomIcon, CustomText, ICON_TYPE} from '../../components';
 import NavigationService from '../NavigationService';
 import {AppConst} from '../../helpers';
-// import {logoutAction} from '../../redux/auth.slice';
+import {logoutAction} from '../../store/auth.slice';
 
-const DrawerContent = ({navigation}) => {
+const DrawerContent = props => {
+  const {navigation, authReducer, onLogoutAction} = props;
+
   const onLogoutClick = () =>
     Alert.alert('Do you want to Log out?', '', [
       {
@@ -19,7 +20,10 @@ const DrawerContent = ({navigation}) => {
       {
         text: 'OK',
         onPress: () => {
-          // onLogoutAction();
+          console.log('Logout');
+          onLogoutAction().then(res => {
+            console.log(res, 'Logout');
+          });
         },
       },
     ]);
@@ -35,6 +39,7 @@ const DrawerContent = ({navigation}) => {
             color={'red'}
           />
         </View>
+        <CustomText text={authReducer?.userDetails?.email ?? 'test'} />
         <Pressable onPress={() => NavigationService.closeDrawer()}>
           <CustomIcon
             origin={ICON_TYPE.ANT_ICON}

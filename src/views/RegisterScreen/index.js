@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import * as Yup from 'yup';
-import {Messages, Metrices, RoutesName} from '../../helpers';
+import {Messages, Metrices, RoutesName, ToastMessage} from '../../helpers';
 
 import {
   Container,
@@ -14,6 +14,7 @@ import {
   Spacer,
 } from '../../components';
 import NavigationService from '../../navigations/NavigationService';
+import {registerAction} from '../../store/auth.slice';
 
 const {hp, wp} = Metrices;
 const REGEX = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
@@ -28,7 +29,7 @@ const validationSchema = Yup.object({
 });
 const RegisterScreen = props => {
   const [buttonDisabled, setButtonDisabled] = useState(false);
-  const {onLoginAction, authReducer} = props;
+  const {onRegisterAction, authReducer} = props;
   //Initial value for formik
   const initialValues = {
     email: '',
@@ -59,10 +60,15 @@ const RegisterScreen = props => {
         email: value.email,
         password: value.password,
       };
-      console.log('Data', formData);
-      // onLoginAction(formData).then(res => {
-      //   setButtonDisabled(false);
-      // });
+      onRegisterAction(formData).then(res => {
+        if (res?.type?.includes('rejected')) {
+          ToastMessage.showToast({title: res.payload});
+        }
+        if (res?.type?.includes('fulfilled')) {
+          ToastMessage.showToast({title: 'You have registered successfully'});
+        }
+        setButtonDisabled(false);
+      });
     } catch (err) {
       setErrors({serverError: err.message});
       setButtonDisabled(false);
@@ -136,9 +142,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  onLoginAction: params => dispatch(loginAction(params)),
-  fetchLocationFromAddress: params =>
-    dispatch(fetchLocationFromAddressAction(params)),
+  onRegisterAction: params => dispatch(registerAction(params)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen);
 
