@@ -65,7 +65,7 @@ const RegisterScreen = props => {
           ToastMessage.showToast({title: res.payload});
         }
         if (res?.type?.includes('fulfilled')) {
-          ToastMessage.showToast({title: 'You have registered successfully'});
+          ToastMessage.showToast({title: Messages.REGISTER_SUCCESS});
         }
         setButtonDisabled(false);
       });

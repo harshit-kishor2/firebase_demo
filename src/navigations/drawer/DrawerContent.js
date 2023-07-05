@@ -4,7 +4,7 @@ import {StyleSheet, View, Pressable, Alert} from 'react-native';
 import {connect} from 'react-redux';
 import {Container, CustomIcon, CustomText, ICON_TYPE} from '../../components';
 import NavigationService from '../NavigationService';
-import {AppConst} from '../../helpers';
+import {AppConst, Messages, ToastMessage} from '../../helpers';
 import {logoutAction} from '../../store/auth.slice';
 
 const DrawerContent = props => {
@@ -22,7 +22,12 @@ const DrawerContent = props => {
         onPress: () => {
           console.log('Logout');
           onLogoutAction().then(res => {
-            console.log(res, 'Logout');
+            if (res?.type?.includes('rejected')) {
+              ToastMessage.showToast({title: res.payload});
+            }
+            if (res?.type?.includes('fulfilled')) {
+              ToastMessage.showToast({title: Messages.LOGOUT_SUCCESS});
+            }
           });
         },
       },

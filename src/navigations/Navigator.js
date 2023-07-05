@@ -7,25 +7,28 @@ import {isAuthenticate} from '../store/auth.slice';
 import DrawerNavigator from './drawer/DrawerNavigator';
 
 const Navigator = props => {
-  const {isAuthenticated} = props;
-  console.log('Data', isAuthenticated);
+  const {authReducer} = props;
 
   //
   useEffect(() => {
     isMountedRef.current = true;
     return () => (isMountedRef.current = false);
   }, []);
-
+  console.log('Status', authReducer.isAuthenticate);
   return (
     <NavigationContainer ref={navigationRef}>
-      {isAuthenticated ? <DrawerNavigator /> : <RootStackNavigator />}
+      {authReducer.isAuthenticate ? (
+        <DrawerNavigator />
+      ) : (
+        <RootStackNavigator />
+      )}
     </NavigationContainer>
   );
 };
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: state.authReducer?.isAuthenticate,
+    authReducer: state?.authReducer,
   };
 };
 

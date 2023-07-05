@@ -69,7 +69,7 @@ const LoginScreen = props => {
           ToastMessage.showToast({title: res.payload});
         }
         if (res?.type?.includes('fulfilled')) {
-          ToastMessage.showToast({title: 'You have logged in successfully.'});
+          ToastMessage.showToast({title: Messages.LOGIN_SUCCESS});
         }
         setButtonDisabled(false);
       });

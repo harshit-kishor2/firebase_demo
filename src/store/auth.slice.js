@@ -15,6 +15,9 @@ const entityAdapter = createEntityAdapter();
 const initialState = entityAdapter.getInitialState({
   isAuthenticate: false,
 
+  stayLoadingStatus: LoadingStatus.NOT_LOADED,
+  stayError: null,
+
   registerLoadingStatus: LoadingStatus.NOT_LOADED,
   registerError: null,
 
@@ -25,6 +28,26 @@ const initialState = entityAdapter.getInitialState({
   logoutLoadingStatus: LoadingStatus.NOT_LOADED,
   logoutError: null,
 });
+
+/**
+ * registerAction
+ */
+
+export const stayLoginAction = createAsyncThunk(
+  `${SLICE_FEATURE_KEY}/stayLoginAction`,
+  async (val, thunkAPI) => {
+    try {
+      let response = auth().currentUser;
+      return response;
+    } catch (error) {
+      console.log('error', error);
+      let message = getMessageFromErrorCode(error.code);
+      return thunkAPI.rejectWithValue(
+        error.response ? error.response?.data : message,
+      );
+    }
+  },
+);
 
 /**
  * registerAction
@@ -141,6 +164,21 @@ const reduxSlice = createSlice({
       .addCase(logoutAction.rejected, (state, action) => {
         state.logoutLoadingStatus = LoadingStatus.FAILED;
         state.logoutError = action.payload || action.error.message;
+      })
+      // stay login action
+      .addCase(stayLoginAction.pending, state => {
+        state.stayLoadingStatus = LoadingStatus.LOADING;
+      })
+      .addCase(stayLoginAction.fulfilled, (state, action) => {
+        state.stayLoadingStatus = LoadingStatus.LOADED;
+        if (action.payload) {
+          state.userDetails = action.payload;
+          state.isAuthenticate = true;
+        }
+      })
+      .addCase(stayLoginAction.rejected, (state, action) => {
+        state.stayLoadingStatus = LoadingStatus.FAILED;
+        state.stayError = action.payload || action.error.message;
       });
   },
 });

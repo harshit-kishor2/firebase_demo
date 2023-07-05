@@ -24,4 +24,7 @@ export const Messages = {
   PASSWORD_REQUIRED: 'Password is required.',
   PASSWORD_REGEX:
     'Password must have minimum 8 characters and contain at least 1 UPPERCASE, 1 lower case.',
+  REGISTER_SUCCESS: 'Registration Successful. Please Login to proceed.',
+  LOGIN_SUCCESS: 'Login successful.',
+  LOGOUT_SUCCESS: 'Logout successful.',
 };

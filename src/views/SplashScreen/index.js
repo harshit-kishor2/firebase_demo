@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import SplashView from './SplashView';
 import Navigator from '../../navigations/Navigator';
+import {stayLoginAction} from '../../store/auth.slice';
 
 const SplashScreen = props => {
   const {checkIsLoggedInUser} = props;
@@ -13,7 +14,7 @@ const SplashScreen = props => {
     setTimeout(() => {
       setIsSplashEnd(true);
     }, 3000);
-    // checkIsLoggedInUser();
+    checkIsLoggedInUser();
   }, []);
 
   return isSplashEnd ? <Navigator /> : <SplashView />;
@@ -21,7 +22,7 @@ const SplashScreen = props => {
 
 const mapStateToProps = state => {
   return {
-    staticDataReducer: state.staticDataReducer,
+    authReducer: state?.authReducer,
   };
 };
 
