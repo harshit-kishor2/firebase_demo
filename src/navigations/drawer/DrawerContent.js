@@ -1,14 +1,15 @@
 import {DrawerItem} from '@react-navigation/drawer';
 import React from 'react';
-import {StyleSheet, View, Pressable, Alert} from 'react-native';
+import {StyleSheet, View, Pressable, Alert, Image} from 'react-native';
 import {connect} from 'react-redux';
 import {Container, CustomIcon, CustomText, ICON_TYPE} from '../../components';
 import NavigationService from '../NavigationService';
 import {AppConst, Messages, ToastMessage} from '../../helpers';
 import {logoutAction} from '../../store/auth.slice';
+import {IMAGES} from '../../assets';
 
 const DrawerContent = props => {
-  const {navigation, authReducer, onLogoutAction} = props;
+  const {authReducer, onLogoutAction} = props;
 
   const onLogoutClick = () =>
     Alert.alert('Do you want to Log out?', '', [
@@ -35,25 +36,38 @@ const DrawerContent = props => {
 
   return (
     <Container useSafeAreaView={true} style={styles.containerView}>
-      <View style={styles.userInfoSection}>
-        <View style={styles.profile_view}>
-          <CustomIcon
-            origin={ICON_TYPE.ICONICONS}
-            name={'logo-github'}
-            size={82}
-            color={'red'}
+      <View
+        style={{
+          borderBottomColor: '#FFFFFF4D',
+          borderBottomWidth: 1,
+          padding: 10,
+        }}>
+        <View style={styles.userInfoSection}>
+          <View style={styles.profile_view}>
+            <Image
+              style={{height: 75, width: 75, borderRadius: 75 / 2}}
+              source={IMAGES.profile}
+            />
+          </View>
+          <Pressable onPress={() => NavigationService.closeDrawer()}>
+            <CustomIcon
+              origin={ICON_TYPE.ANT_ICON}
+              name={'closecircleo'}
+              size={30}
+              color={'white'}
+            />
+          </Pressable>
+        </View>
+        <View>
+          <CustomText
+            style={{
+              color: 'white',
+            }}
+            text={authReducer?.userDetails?.email}
           />
         </View>
-        <CustomText text={authReducer?.userDetails?.email ?? 'test'} />
-        <Pressable onPress={() => NavigationService.closeDrawer()}>
-          <CustomIcon
-            origin={ICON_TYPE.ANT_ICON}
-            name={'closecircleo'}
-            size={30}
-            color={'red'}
-          />
-        </Pressable>
       </View>
+
       <View style={{flex: 1}}>
         <DrawerItem
           icon={() => (
@@ -96,10 +110,6 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(DrawerContent);
 
 const styles = StyleSheet.create({
-  drawerContent: {
-    flex: 1,
-    paddingTop: 25,
-  },
   profile_view: {
     height: 82,
     width: 82,
@@ -115,8 +125,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 20,
-    borderBottomColor: '#FFFFFF4D',
-    borderBottomWidth: 1,
   },
   row: {
     marginTop: 20,
